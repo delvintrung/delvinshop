@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Google Login</title>
+    <!-- Thư viện Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body style="font-family: sans-serif; padding: 20px;">
+
+<h2>Demo Login Google với Spring Boot</h2>
+
+<!-- Nơi hiển thị nút Login -->
+<div id="g_id_onload"
+     data-client_id="111927386530-q7naokbvuv4euk44ot28a7ts4ttka55q.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse"
+     data-auto_select="false">
+</div>
+<div class="g_id_signin" data-type="standard"></div>
+
+<h3>Kết quả:</h3>
+<div style="background: #f4f4f4; padding: 10px; border-radius: 5px;">
+    <p><strong>Google ID Token:</strong> <span id="gToken" style="color: blue; word-break: break-all;">(Chưa có)</span></p>
+    <p><strong>Backend JWT Response:</strong></p>
+    <pre id="backendResponse" style="color: green;">(Đang chờ login...)</pre>
+</div>
+
+<script>
+    // Hàm này được Google gọi tự động sau khi login thành công
+    function handleCredentialResponse(response) {
+        const idToken = response.credential;
+        document.getElementById("gToken").innerText = idToken.substring(0, 50) + "...";
+
+        console.log("Google ID Token: ", idToken);
+
+        // Gửi Token xuống Backend của bạn
+        callBackendAPI(idToken);
+    }
+
+    async function callBackendAPI(googleToken) {
+        try {
+            const res = await fetch("http://localhost:8080/api/v1/auth/google-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ token: googleToken })
+            });
+
+            const data = await res.json();
+            document.getElementById("backendResponse").innerText = JSON.stringify(data, null, 2);
+
+            if(data.token) {
+                alert("Login thành công! JWT Token đã được trả về.");
+            }
+        } catch (error) {
+            document.getElementById("backendResponse").innerText = "Lỗi gọi API: " + error;
+            console.error("Error:", error);
+        }
+    }
+</script>
+</body>
+</html>

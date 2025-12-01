@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: DelvinShop
+  datasource:
+    url: jdbc:mysql://localhost:3306/delvinshop
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
+google:
+  oauth2:
+    client:
+      id: ${GOOGLE_CLIENT_ID}
+      secret: ${GOOGLE_CLIENT_SECRET}
+      redirect-uri: ${GOOGLE_REDIRECT_URI}
+
+momo:
+  partner-code: ${MOMO_PARTNER_CODE}
+  access-key: ${MOMO_ACCESS_KEY}
+  secret-key: ${MOMO_SECRET_KEY}
+  endpoint: https://test-payment.momo.vn/v2/gateway/api/create
+  redirect-url: http://localhost:8080/api/v1/payment/momo-return
+  ipn-url: http://localhost:8080/api/v1/payment/momo-ipn
+
+vnpay:
+  tmn-code: ${VNPAY_TMN_CODE}
+  hash-secret: ${VNPAY_HASH_SECRET}
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: http://localhost:8080/api/v1/payment/vnpay-return
