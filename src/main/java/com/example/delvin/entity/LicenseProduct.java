@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,13 +23,24 @@ public class LicenseProduct {
     String name;
     String description;
     Double price;
-    LocalDateTime expireAt;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    Instant expireAt;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "license_type_id", nullable = false)
+    LicenseType licenseType;
+    @Column(nullable = false, updatable = false)
+    Instant createdAt;
+    @Column(nullable = false)
+    Instant updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+        }
 }

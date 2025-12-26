@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 @Getter
@@ -13,5 +15,5 @@ public class LicenseProductCreateRequest {
     private String name;
     private String description;
     private Double price;
-    private String expireAt;
+    private Instant expireAt;
 }

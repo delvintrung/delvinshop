@@ -29,7 +29,7 @@ public class LicenseProductServiceImpl implements LicenseProductService {
         licenseProductEntity.setDescription(licenseProductCreateRequest.getDescription());
         licenseProductEntity.setPrice(licenseProductCreateRequest.getPrice());
         // Assuming expireAt is in ISO_LOCAL_DATE_TIME format
-        licenseProductEntity.setExpireAt(java.time.LocalDateTime.parse(licenseProductCreateRequest.getExpireAt()));
+        licenseProductEntity.setExpireAt(licenseProductCreateRequest.getExpireAt());
         return licenseProductRepository.save(licenseProductEntity);
     }
 }

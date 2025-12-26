@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,14 +34,17 @@ public class DepositTransaction {
 
     private String bankAccount;
 
-    private LocalDateTime transactionDate;
-    private LocalDateTime processedAt;
+    private Instant transactionDate;
+    private Instant processedAt;
 
     @Enumerated(EnumType.STRING)
     private DepositTransactionStatus status;
 
     @PrePersist
     protected void onCreate() {
-        processedAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = DepositTransactionStatus.PENDING;
+        }
+        this.transactionDate = Instant.now();
     }
 }

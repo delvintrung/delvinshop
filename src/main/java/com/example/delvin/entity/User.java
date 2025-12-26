@@ -1,6 +1,9 @@
     package com.example.delvin.entity;
+    import com.google.api.client.util.DateTime;
     import jakarta.persistence.*;
     import lombok.*;
+
+    import java.time.Instant;
 
     @Entity
     @Getter
@@ -19,8 +22,25 @@
         private String provider;
         private String avatar;
         private String googleId;
+        @Column(nullable = false, updatable = false)
+        private Instant createdAt;
+
+        @Column(nullable = false)
+        private Instant updatedAt;
 
         @OneToOne(cascade = CascadeType.ALL)
         @JoinColumn(name = "wallet_id", referencedColumnName = "id")
         private UserWallet wallet;
+
+        @PrePersist
+        protected void onCreate() {
+            Instant now = Instant.now();
+            this.createdAt = now;
+            this.updatedAt = now;
+        }
+
+        @PreUpdate
+        protected void onUpdate() {
+            this.updatedAt = Instant.now();
+        }
     }
