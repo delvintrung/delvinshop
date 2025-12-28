@@ -18,6 +18,10 @@ public enum ErrorCode {
     LICENSE_TYPE_NOT_FOUND(2002, "Loại giấy phép không tồn tại", HttpStatus.NOT_FOUND),
     LICENSE_PRODUCT_NOT_FOUND(3001, "Sản phẩm giấy phép không tồn tại", HttpStatus.NOT_FOUND),
     GIFTCONTENT_NOT_FOUND(4001, "Nội dung quà tặng không tồn tại", HttpStatus.NOT_FOUND),
+    USER_WALLET_NOT_FOUND(5001, "Ví người dùng không tồn tại", HttpStatus.NOT_FOUND),
+    INSUFFICIENT_FUNDS(5002, "Số dư trong ví không đủ", HttpStatus.BAD_REQUEST),
+    PASSWORD_MISMATCH(6003, "Mật khẩu không khớp", HttpStatus.BAD_REQUEST),
+    EMAIL_ALREADY_EXISTS(6004, "Email đã tồn tại", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
