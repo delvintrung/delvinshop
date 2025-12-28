@@ -1,5 +1,7 @@
 package com.example.delvin.service.impl;
 
+import com.example.delvin.config.apiconfig.AppException;
+import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.response.GoogleLoginResponse;
 import com.example.delvin.entity.User;
 import com.example.delvin.repository.UserRepository;
@@ -35,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
             GoogleIdToken idToken = verifier.verify(idTokenString);
             if (idToken == null) {
-                throw new RuntimeException("Invalid Google ID Token");
+                throw new AppException(ErrorCode.GOOGLE_LOGIN_FAIL);
             }
 
             GoogleIdToken.Payload payload = idToken.getPayload();
@@ -68,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
                     .build();
 
         } catch (Exception e) {
-            throw new RuntimeException("Google login failed: " + e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 }

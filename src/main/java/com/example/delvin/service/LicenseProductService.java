@@ -9,4 +9,6 @@ public interface LicenseProductService {
     List<LicenseProduct> getAllLicenseProducts();
     LicenseProduct getLicenseProductById(Long id);
     LicenseProduct createLicenseProduct(LicenseProductCreateRequest licenseProductCreateRequest);
+    LicenseProduct updateLicenseProduct(Long id, LicenseProductCreateRequest licenseProductCreateRequest);
+    void deleteLicenseProduct(Long id);
 }

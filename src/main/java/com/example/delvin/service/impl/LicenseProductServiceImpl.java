@@ -1,5 +1,7 @@
 package com.example.delvin.service.impl;
 
+import com.example.delvin.config.apiconfig.AppException;
+import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.request.LicenseProductCreateRequest;
 import com.example.delvin.entity.LicenseProduct;
 import com.example.delvin.repository.LicenseProductRepository;
@@ -31,5 +33,21 @@ public class LicenseProductServiceImpl implements LicenseProductService {
         // Assuming expireAt is in ISO_LOCAL_DATE_TIME format
         licenseProductEntity.setExpireAt(licenseProductCreateRequest.getExpireAt());
         return licenseProductRepository.save(licenseProductEntity);
+    }
+
+    @Override
+    public LicenseProduct updateLicenseProduct(Long id, LicenseProductCreateRequest licenseProductCreateRequest) {
+        LicenseProduct existingProduct = licenseProductRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
+        existingProduct.setName(licenseProductCreateRequest.getName());
+        existingProduct.setDescription(licenseProductCreateRequest.getDescription());
+        existingProduct.setPrice(licenseProductCreateRequest.getPrice());
+        existingProduct.setExpireAt(licenseProductCreateRequest.getExpireAt());
+        return licenseProductRepository.save(existingProduct);
+    }
+
+    @Override
+    public void deleteLicenseProduct(Long id) {
+
     }
 }
