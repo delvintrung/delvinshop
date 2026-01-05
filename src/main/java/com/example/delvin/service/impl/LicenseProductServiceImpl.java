@@ -4,7 +4,9 @@ import com.example.delvin.config.apiconfig.AppException;
 import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.request.LicenseProductCreateRequest;
 import com.example.delvin.entity.LicenseProduct;
+import com.example.delvin.entity.LicenseType;
 import com.example.delvin.repository.LicenseProductRepository;
+import com.example.delvin.repository.LicenseTypeRepository;
 import com.example.delvin.service.LicenseProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LicenseProductServiceImpl implements LicenseProductService {
     private final LicenseProductRepository licenseProductRepository;
+    private final LicenseTypeRepository licenseTypeRepository;
 
     @Override
     public List<LicenseProduct> getAllLicenseProducts() {
@@ -26,12 +29,13 @@ public class LicenseProductServiceImpl implements LicenseProductService {
     }
 
     public LicenseProduct createLicenseProduct(LicenseProductCreateRequest licenseProductCreateRequest) {
+        LicenseType licenseType = licenseTypeRepository.findById(licenseProductCreateRequest.getLicenseTypeId())
+                .orElseThrow(() -> new AppException(ErrorCode.LICENSE_TYPE_NOT_FOUND));
         LicenseProduct licenseProductEntity = new LicenseProduct();
         licenseProductEntity.setName(licenseProductCreateRequest.getName());
         licenseProductEntity.setDescription(licenseProductCreateRequest.getDescription());
-        licenseProductEntity.setPrice(licenseProductCreateRequest.getPrice());
-        // Assuming expireAt is in ISO_LOCAL_DATE_TIME format
-        licenseProductEntity.setExpireAt(licenseProductCreateRequest.getExpireAt());
+        licenseProductEntity.setUseWith(licenseProductCreateRequest.getUseWith());
+        licenseProductEntity.setLicenseType(licenseType);
         return licenseProductRepository.save(licenseProductEntity);
     }
 
@@ -41,8 +45,7 @@ public class LicenseProductServiceImpl implements LicenseProductService {
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
         existingProduct.setName(licenseProductCreateRequest.getName());
         existingProduct.setDescription(licenseProductCreateRequest.getDescription());
-        existingProduct.setPrice(licenseProductCreateRequest.getPrice());
-        existingProduct.setExpireAt(licenseProductCreateRequest.getExpireAt());
+        existingProduct.setUseWith(licenseProductCreateRequest.getUseWith());
         return licenseProductRepository.save(existingProduct);
     }
 

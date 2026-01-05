@@ -24,7 +24,7 @@ public class LicenseProductController {
     }
 
     @PostMapping
-    public ApiResponse<LicenseProduct> createLicenseProduct(LicenseProductCreateRequest licenseProduct) {
+    public ApiResponse<LicenseProduct> createLicenseProduct(@RequestBody LicenseProductCreateRequest licenseProduct) {
         LicenseProduct createdProduct = licenseProductServiceImpl.createLicenseProduct(licenseProduct);
         return ApiResponse.<LicenseProduct>builder()
                 .result(createdProduct)

@@ -21,7 +21,8 @@ public enum ErrorCode {
     USER_WALLET_NOT_FOUND(5001, "Ví người dùng không tồn tại", HttpStatus.NOT_FOUND),
     INSUFFICIENT_FUNDS(5002, "Số dư trong ví không đủ", HttpStatus.BAD_REQUEST),
     PASSWORD_MISMATCH(6003, "Mật khẩu không khớp", HttpStatus.BAD_REQUEST),
-    EMAIL_ALREADY_EXISTS(6004, "Email đã tồn tại", HttpStatus.BAD_REQUEST)
+    EMAIL_ALREADY_EXISTS(6004, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
+    LICENSE_KEY_NOT_FOUND(7001, "Khóa giấy phép không tồn tại", HttpStatus.NOT_FOUND)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

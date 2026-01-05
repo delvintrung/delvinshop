@@ -1,9 +1,7 @@
 package com.example.delvin.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.delvin.enums.LicenseKeyPrefix;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -14,6 +12,7 @@ import java.time.Instant;
 public class LicenseProductCreateRequest {
     private String name;
     private String description;
-    private Double price;
-    private Instant expireAt;
+    private LicenseKeyPrefix useWith;
+    @NonNull
+    private Long licenseTypeId;
 }
