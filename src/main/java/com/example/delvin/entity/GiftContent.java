@@ -1,5 +1,6 @@
 package com.example.delvin.entity;
 
+import com.example.delvin.enums.ThemeColor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,8 @@ public class GiftContent {
 
     @Column(columnDefinition = "TEXT")
     private String message;
-    private String themeColor;
+    @Enumerated(EnumType.STRING)
+    private ThemeColor themeColor;
     private String backgroundMusic;
     private String imageUrl;
 

@@ -10,5 +10,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class LicenseKeyCreateRequest {
     private Long licenseProductId;
+    private Long priceLicenseKeyId;
     private LicenseKeyPrefix typePrefix;
 }

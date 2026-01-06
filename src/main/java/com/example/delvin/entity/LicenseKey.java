@@ -37,6 +37,10 @@ public class LicenseKey {
     @JoinColumn(name = "license_product_id", nullable = false)
     private LicenseProduct licenseProduct;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "price_license_key_id", nullable = false)
+    private PriceLicenseKey priceLicenseKey;
+
     @OneToOne(mappedBy = "licenseKey", cascade = CascadeType.ALL)
     private GiftContent giftContent;
 

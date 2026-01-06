@@ -3,9 +3,11 @@ package com.example.delvin.service.impl;
 import com.example.delvin.config.apiconfig.AppException;
 import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.request.LicenseKeyCreateRequest;
+import com.example.delvin.dto.response.LicenseKeyResponse;
 import com.example.delvin.entity.LicenseKey;
 import com.example.delvin.entity.LicenseProduct;
 import com.example.delvin.enums.KeyStatus;
+import com.example.delvin.mapper.LicenseKeyMapper;
 import com.example.delvin.repository.LicenseKeyRepository;
 import com.example.delvin.repository.LicenseProductRepository;
 import com.example.delvin.service.LicenseKeyService;
@@ -14,23 +16,42 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LicenseKeyServiceImpl implements LicenseKeyService {
     private final LicenseKeyRepository licenseKeyRepository;
     private final LicenseProductRepository licenseProductRepository;
+    private final LicenseKeyMapper licenseKeyMapper;
+
+    @Override
+    public List<LicenseKeyResponse> getAllLicenseKeys() {
+
+        List<LicenseKey> licenseKeys = licenseKeyRepository.findAll();
+        return licenseKeyMapper.toResponseList(licenseKeys);
+    }
+
+    @Override
+    public LicenseKey getLicenseKeyById(Long id) {
+        return licenseKeyRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.LICENSE_KEY_NOT_FOUND));
+    }
 
     @Transactional
-    public LicenseKey createLicenseKey(LicenseKeyCreateRequest request) {
+    public LicenseKeyResponse createLicenseKey(LicenseKeyCreateRequest request) {
         LicenseProduct product = licenseProductRepository.findById(request.getLicenseProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
+
+
 
         String finalKeyCode = generateUniqueKeyCode(String.valueOf(request.getTypePrefix()));
         LicenseKey licenseKey = new LicenseKey();
         licenseKey.setKeyCode(finalKeyCode);
         licenseKey.setLicenseProduct(product);
         licenseKey.setStatus(KeyStatus.AVAILABLE);
-        return licenseKeyRepository.save(licenseKey);
+        LicenseKey savedKey = licenseKeyRepository.save(licenseKey);
+        return licenseKeyMapper.toResponse(savedKey);
     }
 
     @Transactional

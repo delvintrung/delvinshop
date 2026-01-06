@@ -12,7 +12,11 @@ public class LicenseKeyResponse {
     private Long id;
     private String keyCode;
     private KeyStatus status;
-    private Long licenseProductId;
+
     private Instant createdAt;
+
+    private LicenseProductResponse licenseProduct;
+    private PriceLicenseKeyResponse priceLicenseKey;
+    private GiftContentResponse giftContent;
 }
 

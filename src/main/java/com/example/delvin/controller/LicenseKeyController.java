@@ -2,17 +2,19 @@ package com.example.delvin.controller;
 
 import com.example.delvin.config.apiconfig.ApiResponse;
 import com.example.delvin.dto.request.LicenseKeyCreateRequest;
+import com.example.delvin.dto.response.GiftContentResponse;
 import com.example.delvin.dto.response.LicenseKeyResponse;
+import com.example.delvin.dto.response.LicenseProductResponse;
+import com.example.delvin.dto.response.PriceLicenseKeyResponse;
 import com.example.delvin.entity.LicenseKey;
 import com.example.delvin.enums.KeyStatus;
 import com.example.delvin.enums.LicenseKeyPrefix;
 import com.example.delvin.repository.LicenseKeyRepository;
 import com.example.delvin.service.LicenseKeyService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/license-keys")
@@ -21,24 +23,35 @@ public class LicenseKeyController {
     private final LicenseKeyService licenseKeyService;
     private final LicenseKeyRepository licenseKeyRepository;
 
+    @GetMapping
+    public ApiResponse<List<LicenseKeyResponse>> getAllLicenseKeys() {
+        List<LicenseKeyResponse> licenseKeys = licenseKeyService.getAllLicenseKeys();
+        return ApiResponse.<List<LicenseKeyResponse>>builder()
+                .result(licenseKeys)
+                .message("Lấy danh sách license key thành công")
+                .build();
+    }
+
+    @GetMapping("{id}")
+    public ApiResponse<LicenseKey> getLicenseKeyById(@PathVariable Long id) {
+        LicenseKey licenseKey = licenseKeyService.getLicenseKeyById(id);
+        return ApiResponse.<LicenseKey>builder()
+                .result(licenseKey)
+                .message("Lấy license key thành công")
+                .build();
+    }
+
     @PostMapping("/create")
     public ApiResponse<LicenseKeyResponse> createLicenseKey(
             @RequestParam Long licenseProductId,
-            @RequestParam LicenseKeyPrefix typePrefix
+            @RequestParam LicenseKeyPrefix typePrefix,
+            @RequestParam Long priceLicenseKeyId
     ) {
         LicenseKeyCreateRequest request =
-                new LicenseKeyCreateRequest(licenseProductId, typePrefix);
+                new LicenseKeyCreateRequest(licenseProductId,priceLicenseKeyId, typePrefix);
+        LicenseKeyResponse response = licenseKeyService.createLicenseKey(request);
 
-        LicenseKey licenseKey =
-                licenseKeyService.createLicenseKey(request);
 
-        LicenseKeyResponse response = new LicenseKeyResponse(
-                licenseKey.getId(),
-                licenseKey.getKeyCode(),
-                licenseKey.getStatus(),
-                licenseKey.getLicenseProduct().getId(),
-                licenseKey.getCreatedAt()
-        );
         return ApiResponse.<LicenseKeyResponse>builder()
                 .result(response)
                 .message("Tạo license key thành công")
