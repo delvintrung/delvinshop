@@ -3,8 +3,10 @@ package com.example.delvin.service.impl;
 import com.example.delvin.config.apiconfig.AppException;
 import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.request.LicenseProductCreateRequest;
+import com.example.delvin.dto.response.LicenseProductResponse;
 import com.example.delvin.entity.LicenseProduct;
 import com.example.delvin.entity.LicenseType;
+import com.example.delvin.mapper.LicenseProductMapper;
 import com.example.delvin.repository.LicenseProductRepository;
 import com.example.delvin.repository.LicenseTypeRepository;
 import com.example.delvin.service.LicenseProductService;
@@ -18,17 +20,20 @@ import java.util.List;
 public class LicenseProductServiceImpl implements LicenseProductService {
     private final LicenseProductRepository licenseProductRepository;
     private final LicenseTypeRepository licenseTypeRepository;
+    private final LicenseProductMapper licenseProductMapper;
 
     @Override
-    public List<LicenseProduct> getAllLicenseProducts() {
-        return licenseProductRepository.findAll();
+    public List<LicenseProductResponse> getAllLicenseProducts() {
+       List<LicenseProduct> listProducts =  licenseProductRepository.findAll();
+       return licenseProductMapper.toResponseList(listProducts);
     }
 
-    public LicenseProduct getLicenseProductById(Long id) {
-        return licenseProductRepository.findById(id).orElse(null);
+    public LicenseProductResponse getLicenseProductById(Long id) {
+        LicenseProduct licenseProduct = licenseProductRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
+        return licenseProductMapper.toResponse(licenseProduct);
     }
 
-    public LicenseProduct createLicenseProduct(LicenseProductCreateRequest licenseProductCreateRequest) {
+    public LicenseProductResponse createLicenseProduct(LicenseProductCreateRequest licenseProductCreateRequest) {
         LicenseType licenseType = licenseTypeRepository.findById(licenseProductCreateRequest.getLicenseTypeId())
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_TYPE_NOT_FOUND));
         LicenseProduct licenseProductEntity = new LicenseProduct();
@@ -36,18 +41,35 @@ public class LicenseProductServiceImpl implements LicenseProductService {
         licenseProductEntity.setDescription(licenseProductCreateRequest.getDescription());
         licenseProductEntity.setUseWith(licenseProductCreateRequest.getUseWith());
         licenseProductEntity.setLicenseType(licenseType);
-        return licenseProductRepository.save(licenseProductEntity);
+        LicenseProduct licenseProduct = licenseProductRepository.save(licenseProductEntity);
+        return licenseProductMapper.toResponse(licenseProduct);
     }
 
     @Override
-    public LicenseProduct updateLicenseProduct(Long id, LicenseProductCreateRequest licenseProductCreateRequest) {
+    public LicenseProductResponse updateLicenseProduct(
+            Long id,
+            LicenseProductCreateRequest request
+    ) {
         LicenseProduct existingProduct = licenseProductRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
-        existingProduct.setName(licenseProductCreateRequest.getName());
-        existingProduct.setDescription(licenseProductCreateRequest.getDescription());
-        existingProduct.setUseWith(licenseProductCreateRequest.getUseWith());
-        return licenseProductRepository.save(existingProduct);
+
+        if (request.getName() != null) {
+            existingProduct.setName(request.getName());
+        }
+
+        if (request.getDescription() != null) {
+            existingProduct.setDescription(request.getDescription());
+        }
+
+        if (request.getUseWith() != null) {
+            existingProduct.setUseWith(request.getUseWith());
+        }
+
+        return licenseProductMapper.toResponse(
+                licenseProductRepository.save(existingProduct)
+        );
     }
+
 
     @Override
     public void deleteLicenseProduct(Long id) {

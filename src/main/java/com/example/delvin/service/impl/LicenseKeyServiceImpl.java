@@ -6,10 +6,12 @@ import com.example.delvin.dto.request.LicenseKeyCreateRequest;
 import com.example.delvin.dto.response.LicenseKeyResponse;
 import com.example.delvin.entity.LicenseKey;
 import com.example.delvin.entity.LicenseProduct;
+import com.example.delvin.entity.PriceLicenseKey;
 import com.example.delvin.enums.KeyStatus;
 import com.example.delvin.mapper.LicenseKeyMapper;
 import com.example.delvin.repository.LicenseKeyRepository;
 import com.example.delvin.repository.LicenseProductRepository;
+import com.example.delvin.repository.PriceLicenseKeyRepository;
 import com.example.delvin.service.LicenseKeyService;
 import com.example.delvin.util.KeyGeneratorUtils;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,7 @@ import java.util.List;
 public class LicenseKeyServiceImpl implements LicenseKeyService {
     private final LicenseKeyRepository licenseKeyRepository;
     private final LicenseProductRepository licenseProductRepository;
+    private final PriceLicenseKeyRepository priceLicenseKeyRepository;
     private final LicenseKeyMapper licenseKeyMapper;
 
     @Override
@@ -33,15 +36,19 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
     }
 
     @Override
-    public LicenseKey getLicenseKeyById(Long id) {
-        return licenseKeyRepository.findById(id)
+    public LicenseKeyResponse getLicenseKeyById(Long id) {
+        LicenseKey licenseKey = licenseKeyRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_KEY_NOT_FOUND));
+        return licenseKeyMapper.toResponse(licenseKey);
     }
 
     @Transactional
     public LicenseKeyResponse createLicenseKey(LicenseKeyCreateRequest request) {
         LicenseProduct product = licenseProductRepository.findById(request.getLicenseProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_PRODUCT_NOT_FOUND));
+
+        PriceLicenseKey priceLicenseKey = priceLicenseKeyRepository.findById(request.getPriceLicenseKeyId())
+                .orElseThrow(()-> new AppException(ErrorCode.PRICE_LICENSE_KEY_NOT_FOUND));
 
 
 
@@ -50,27 +57,27 @@ public class LicenseKeyServiceImpl implements LicenseKeyService {
         licenseKey.setKeyCode(finalKeyCode);
         licenseKey.setLicenseProduct(product);
         licenseKey.setStatus(KeyStatus.AVAILABLE);
+        licenseKey.setPriceLicenseKey(priceLicenseKey);
         LicenseKey savedKey = licenseKeyRepository.save(licenseKey);
         return licenseKeyMapper.toResponse(savedKey);
     }
 
     @Transactional
-    public LicenseKey updateLicenseKeyStatus(Long id, KeyStatus status) {
+    public LicenseKeyResponse updateLicenseKeyStatus(Long id, KeyStatus status) {
         LicenseKey licenseKey = licenseKeyRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_KEY_NOT_FOUND));
         licenseKey.setStatus(status);
-        return licenseKeyRepository.save(licenseKey);
+        licenseKeyRepository.save(licenseKey);
+        return licenseKeyMapper.toResponse(licenseKey);
     }
 
     private String generateUniqueKeyCode(String prefix) {
         String keyCode;
-        int maxRetry = 5; // Chỉ thử tối đa 5 lần để tránh treo vô hạn (dù xác suất trùng rất thấp)
+        int maxRetry = 5;
         int attempt = 0;
 
         do {
-            // Sinh ngẫu nhiên 16 ký tự (4 block 4 ký tự)
             String randomPart = KeyGeneratorUtils.generateRandomString(16);
-            // Ghép Prefix: VIP-ABCD-EFGH-IJKL-MNOP
             keyCode = KeyGeneratorUtils.formatKey(prefix, randomPart);
 
             attempt++;

@@ -3,7 +3,7 @@ package com.example.delvin.controller;
 
 import com.example.delvin.config.apiconfig.ApiResponse;
 import com.example.delvin.dto.request.LicenseTypeRequest;
-import com.example.delvin.entity.LicenseType;
+import com.example.delvin.dto.response.LicenseTypeResponse;
 import com.example.delvin.service.LicenseTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,35 +17,35 @@ public class LicenseTypeController {
     private final LicenseTypeService licenseTypeService;
 
     @GetMapping
-    public ApiResponse<List<LicenseType>> getAll() {
-        return ApiResponse.<List<LicenseType>>builder()
+    public ApiResponse<List<LicenseTypeResponse>> getAll() {
+        return ApiResponse.<List<LicenseTypeResponse>>builder()
                 .result(licenseTypeService.getAllLicenseTypes())
                 .message("Lấy danh sách loại license thành công")
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<LicenseType> getById(@PathVariable Long id) {
-        LicenseType result = licenseTypeService.getLicenseTypeById(id);
-        return ApiResponse.<LicenseType>builder()
+    public ApiResponse<LicenseTypeResponse> getById(@PathVariable Long id) {
+        LicenseTypeResponse result = licenseTypeService.getLicenseTypeById(id);
+        return ApiResponse.<LicenseTypeResponse>builder()
                 .result(result)
                 .message("Lấy loại license thành công")
                 .build();
     }
 
     @PostMapping
-    public ApiResponse<LicenseType> create(@RequestBody LicenseTypeRequest request) {
-        LicenseType result = licenseTypeService.createLicenseType(request);
-        return ApiResponse.<LicenseType>builder()
+    public ApiResponse<LicenseTypeResponse> create(@RequestBody LicenseTypeRequest request) {
+        LicenseTypeResponse result = licenseTypeService.createLicenseType(request);
+        return ApiResponse.<LicenseTypeResponse>builder()
                 .result(result)
                 .message("Tạo loại license thành công")
                 .build();
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<LicenseType> update(@PathVariable Long id, @RequestBody LicenseTypeRequest request) {
-        LicenseType result = licenseTypeService.updateLicenseType(id, request);
-        return ApiResponse.<LicenseType>builder()
+    public ApiResponse<LicenseTypeResponse> update(@PathVariable Long id, @RequestBody LicenseTypeRequest request) {
+        LicenseTypeResponse result = licenseTypeService.updateLicenseType(id, request);
+        return ApiResponse.<LicenseTypeResponse>builder()
                 .result(result)
                 .message("Cập nhật loại license thành công")
                 .build();

@@ -35,6 +35,10 @@ public class GiftContent {
     @Column(nullable = false)
     private Instant updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "license_product_id", referencedColumnName = "id")
+    private LicenseProduct licenseProduct;
+
     @OneToOne
     @JoinColumn(name = "license_key_id", referencedColumnName = "id")
     private LicenseKey licenseKey;

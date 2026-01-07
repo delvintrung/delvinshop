@@ -33,9 +33,9 @@ public class LicenseKeyController {
     }
 
     @GetMapping("{id}")
-    public ApiResponse<LicenseKey> getLicenseKeyById(@PathVariable Long id) {
-        LicenseKey licenseKey = licenseKeyService.getLicenseKeyById(id);
-        return ApiResponse.<LicenseKey>builder()
+    public ApiResponse<LicenseKeyResponse> getLicenseKeyById(@PathVariable Long id) {
+        LicenseKeyResponse licenseKey = licenseKeyService.getLicenseKeyById(id);
+        return ApiResponse.<LicenseKeyResponse>builder()
                 .result(licenseKey)
                 .message("Lấy license key thành công")
                 .build();
@@ -60,14 +60,14 @@ public class LicenseKeyController {
 
 
     @PostMapping("/update-status")
-    public ApiResponse<LicenseKey> updateLicenseKeyStatus(@RequestParam Long id, @RequestParam Integer status) {
-        LicenseKey updatedLicenseKey = licenseKeyService.updateLicenseKeyStatus(id, switch (status) {
+    public ApiResponse<LicenseKeyResponse> updateLicenseKeyStatus(@RequestParam Long id, @RequestParam Integer status) {
+        LicenseKeyResponse updatedLicenseKey = licenseKeyService.updateLicenseKeyStatus(id, switch (status) {
             case 1 -> KeyStatus.SOLD;
             case 2 -> KeyStatus.USED;
             case 3 -> KeyStatus.EXPIRED;
             default -> KeyStatus.AVAILABLE;
         });
-        return ApiResponse.<LicenseKey>builder()
+        return ApiResponse.<LicenseKeyResponse>builder()
                 .result(updatedLicenseKey)
                 .message("Cập nhật trạng thái license key thành công")
                 .build();

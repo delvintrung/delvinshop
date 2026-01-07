@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LicenseKeyService {
     List<LicenseKeyResponse> getAllLicenseKeys();
-    LicenseKey getLicenseKeyById(Long id);
+    LicenseKeyResponse getLicenseKeyById(Long id);
     LicenseKeyResponse createLicenseKey(LicenseKeyCreateRequest request);
-    LicenseKey updateLicenseKeyStatus(Long id, com.example.delvin.enums.KeyStatus status);
+    LicenseKeyResponse updateLicenseKeyStatus(Long id, com.example.delvin.enums.KeyStatus status);
 }

@@ -3,7 +3,6 @@ package com.example.delvin.mapper;
 import com.example.delvin.dto.response.LicenseKeyResponse;
 import com.example.delvin.entity.LicenseKey;
 import org.mapstruct.Mapper;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

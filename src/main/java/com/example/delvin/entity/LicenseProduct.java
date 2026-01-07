@@ -3,6 +3,7 @@ package com.example.delvin.entity;
 import com.example.delvin.enums.KeyStatus;
 import com.example.delvin.enums.LicenseKeyPrefix;
 import com.example.delvin.enums.LicenseKeyProductStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "license_products")
@@ -26,6 +29,11 @@ public class LicenseProduct {
     private LicenseKeyPrefix useWith;
     @Enumerated(EnumType.STRING)
     LicenseKeyProductStatus status;
+
+    @OneToMany(mappedBy = "licenseProduct", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<GiftContent> giftContents = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "license_type_id", nullable = false)
     LicenseType licenseType;

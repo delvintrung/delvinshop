@@ -4,45 +4,55 @@ package com.example.delvin.service.impl;
 import com.example.delvin.config.apiconfig.AppException;
 import com.example.delvin.config.apiconfig.ErrorCode;
 import com.example.delvin.dto.request.LicenseTypeRequest;
+import com.example.delvin.dto.response.LicenseTypeResponse;
 import com.example.delvin.entity.LicenseType;
+import com.example.delvin.mapper.LicenseTypeMapper;
 import com.example.delvin.repository.LicenseTypeRepository;
 import com.example.delvin.service.LicenseTypeService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class LicenseTypeServiceImpl implements LicenseTypeService {
     private final LicenseTypeRepository licenseTypeRepository;
+    private final LicenseTypeMapper licenseTypeMapper;
 
     @Override
-    public LicenseType createLicenseType(LicenseTypeRequest request) {
+    public LicenseTypeResponse createLicenseType(LicenseTypeRequest request) {
 
         if (licenseTypeRepository.existsByTypeName(request.getTypeName())) {
             throw new AppException(ErrorCode.LICENSE_TYPE_EXISTED);
         }
         LicenseType licenseType = new LicenseType();
         licenseType.setTypeName(request.getTypeName());
-        return licenseTypeRepository.save(licenseType);
+        licenseTypeRepository.save(licenseType);
+        return licenseTypeMapper.toResponse(licenseType);
     }
 
     @Override
-    public LicenseType getLicenseTypeById(Long id) {
-        return licenseTypeRepository.findById(id)
+    public LicenseTypeResponse getLicenseTypeById(Long id) {
+        LicenseType licenseType = licenseTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_TYPE_NOT_FOUND));
+        return licenseTypeMapper.toResponse(licenseType);
     }
 
     @Override
-            public List<LicenseType> getAllLicenseTypes() {
-        return licenseTypeRepository.findAll();
+    public List<LicenseTypeResponse> getAllLicenseTypes()  {
+        List<LicenseType> licenseTypeList = licenseTypeRepository.findAll();
+        return licenseTypeMapper.toResponseList(licenseTypeList);
     }
 
     @Override
-    public LicenseType updateLicenseType(Long id, LicenseTypeRequest request) {
+    public LicenseTypeResponse updateLicenseType(Long id, LicenseTypeRequest request) {
         LicenseType existingLicenseType = licenseTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LICENSE_TYPE_NOT_FOUND));
-        existingLicenseType.setTypeName(request.getTypeName());
-        return licenseTypeRepository.save(existingLicenseType);
+        if(request.getTypeName() != null)
+        {existingLicenseType.setTypeName(request.getTypeName());}
+        LicenseType licenseType =  licenseTypeRepository.save(existingLicenseType);
+        return licenseTypeMapper.toResponse(licenseType);
     }
 
     @Override
@@ -53,7 +63,4 @@ public class LicenseTypeServiceImpl implements LicenseTypeService {
         licenseTypeRepository.deleteById(id);
     }
 
-    LicenseTypeServiceImpl(LicenseTypeRepository licenseTypeRepository) {
-        this.licenseTypeRepository = licenseTypeRepository;
-    }
 }

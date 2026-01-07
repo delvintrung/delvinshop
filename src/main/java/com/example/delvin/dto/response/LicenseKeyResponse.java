@@ -17,6 +17,5 @@ public class LicenseKeyResponse {
 
     private LicenseProductResponse licenseProduct;
     private PriceLicenseKeyResponse priceLicenseKey;
-    private GiftContentResponse giftContent;
 }
 
