@@ -1,5 +1,6 @@
 package com.example.delvin.controller;
 
+import com.example.delvin.dto.response.UserResponse;
 import com.example.delvin.entity.User;
 import com.example.delvin.service.impl.UserSeviceImpl;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,9 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
 public class UserController {
-    UserSeviceImpl userSeviceImpl;
+    private final UserSeviceImpl userSeviceImpl;
     @GetMapping
-    public List<User> getUsers() {
+    public List<UserResponse> getUsers() {
         return userSeviceImpl.getAllUsers();
     }
 }

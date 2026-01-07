@@ -1,11 +1,12 @@
 package com.example.delvin.service;
 
 import com.example.delvin.dto.request.UserWalletRequest;
+import com.example.delvin.dto.response.UserWalletResponse;
 import com.example.delvin.entity.UserWallet;
 
 public interface UserWalletService {
-    UserWallet createUserWallet(UserWalletRequest request);
-    UserWallet getUserWalletByUserId(Long userId);
-    UserWallet updateUserWallet(Long userId, UserWalletRequest request);
-    UserWallet deleteUserWallet(Long userId);
+    UserWalletResponse createUserWallet(UserWalletRequest request);
+    UserWalletResponse getUserWalletByUserId(Long userId);
+    UserWalletResponse updateUserWallet(Long userId, UserWalletRequest request);
+    UserWalletResponse deleteUserWallet(Long userId);
 }
