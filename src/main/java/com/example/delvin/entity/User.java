@@ -27,9 +27,9 @@
         @Column(nullable = false)
         private Instant updatedAt;
 
-        @OneToOne(cascade = CascadeType.ALL)
-        @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+        @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private UserWallet wallet;
+
 
         @PrePersist
         protected void onCreate() {

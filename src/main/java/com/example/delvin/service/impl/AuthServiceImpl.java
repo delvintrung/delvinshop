@@ -23,6 +23,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -70,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepo.findByEmail(email)
                     .orElseGet(() -> {
                         UserWallet wallet = UserWallet.builder()
-                                .balance(0.0)
+                                .balance(BigDecimal.ZERO)
                                 .currency("VND")
                                 .build();
                         User newUser = User.builder()
@@ -112,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
         String hashPass = hashPassword(request.getPassword());
 
         UserWallet wallet = UserWallet.builder()
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .currency("VND")
                 .build();
         userWalletRepo.save(wallet);

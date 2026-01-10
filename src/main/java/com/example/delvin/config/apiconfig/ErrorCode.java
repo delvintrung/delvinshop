@@ -24,7 +24,8 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(6004, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
     LICENSE_KEY_NOT_FOUND(7001, "Khóa giấy phép không tồn tại", HttpStatus.NOT_FOUND),
     WALLET_NOT_FOUND(5003, "Ví không tồn tại", HttpStatus.NOT_FOUND),
-    PRICE_LICENSE_KEY_NOT_FOUND(8001, "Giá khóa giấy phép không tồn tại", HttpStatus.NOT_FOUND)
+    PRICE_LICENSE_KEY_NOT_FOUND(8001, "Giá khóa giấy phép không tồn tại", HttpStatus.NOT_FOUND),
+    DEPOSIT_NOT_FOUND(9001, "Giao dịch nạp tiền không tồn tại", HttpStatus.NOT_FOUND)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

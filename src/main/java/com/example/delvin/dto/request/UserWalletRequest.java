@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Data
 @Setter
 @AllArgsConstructor
 public class UserWalletRequest {
-    private Double balance;
+    private BigDecimal balance;
     private String currency;
 }
