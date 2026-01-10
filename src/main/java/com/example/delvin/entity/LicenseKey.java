@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "license_keys")
@@ -32,6 +33,9 @@ public class LicenseKey {
     private Instant createdAt;
     @Column(nullable = false)
     private Instant updatedAt;
+
+    @OneToOne(mappedBy = "licenseKey", fetch = FetchType.LAZY)
+    private HistoryBuyLicense historyBuyLicense;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "license_product_id", nullable = false)

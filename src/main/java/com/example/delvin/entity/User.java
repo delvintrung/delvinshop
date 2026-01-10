@@ -3,6 +3,8 @@
     import lombok.*;
 
     import java.time.Instant;
+    import java.util.ArrayList;
+    import java.util.List;
 
     @Entity
     @Getter
@@ -30,6 +32,8 @@
         @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private UserWallet wallet;
 
+        @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+        private List<HistoryBuyLicense> historyBuyLicenses = new ArrayList<>();
 
         @PrePersist
         protected void onCreate() {
