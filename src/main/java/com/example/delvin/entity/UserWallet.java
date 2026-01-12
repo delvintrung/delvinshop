@@ -4,6 +4,7 @@ package com.example.delvin.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -18,10 +19,11 @@ public class UserWallet {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "wallet")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    private Double balance;
+    private BigDecimal balance;
 
     private String currency;
 
@@ -29,7 +31,7 @@ public class UserWallet {
 
     @PrePersist
     protected void onCreate() {
-        if (balance == null) balance = 0.0;
+        if (balance == null) balance = BigDecimal.valueOf(0.0);
         if (currency == null) currency = "VND";
         updatedAt = Instant.now();
     }

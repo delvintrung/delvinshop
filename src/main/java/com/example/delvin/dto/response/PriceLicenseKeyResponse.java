@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -12,7 +13,7 @@ import java.time.Instant;
 public class PriceLicenseKeyResponse {
     private Long id;
     private String description;
-    private Double price;
+    private BigDecimal price;
 
     private Instant createdAt;
     private Instant updatedAt;

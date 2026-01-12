@@ -27,7 +27,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/error", "/favicon.ico").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/login/**", "/").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/login/**", "/","/api/v1/payment/vnpay-ipn",
+                                "/api/v1/payment/vnpay-return").permitAll()
                         .anyRequest().authenticated()
                 )
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,11 +27,10 @@ public class Order {
     @Column(unique = true)
     private String orderCode;
 
-    private Long userId;
     private String customerEmail;
     private String customerPhone;
 
-    private Double totalAmount;
+    private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @Column(nullable = false, updatable = false)
