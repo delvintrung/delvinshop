@@ -102,10 +102,6 @@ public class DepositTransactionServiceImpl implements DepositTransactionService 
                     return userWalletRepository.save(w);
                 });
 
-
-        wallet.setBalance(wallet.getBalance().add(deposit.getAmount()));
-        userWalletRepository.save(wallet);
-
         WalletTransaction walletTx = new WalletTransaction();
         walletTx.setWallet(wallet);
         walletTx.setAmount(deposit.getAmount());
@@ -113,6 +109,12 @@ public class DepositTransactionServiceImpl implements DepositTransactionService 
         walletTx.setRefId(deposit.getId());
         walletTx.setBalanceAfter(wallet.getBalance());
         walletTransactionRepository.save(walletTx);
+
+
+        wallet.setBalance(wallet.getBalance().add(deposit.getAmount()));
+        userWalletRepository.save(wallet);
+
+
 
         deposit.setStatus(DepositTransactionStatus.SUCCESS);
         deposit.setExternalTxnId(callback.getExternalTxnId());
