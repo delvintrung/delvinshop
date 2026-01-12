@@ -10,5 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderCreateRequest {
     private Long userId;
+    private Long productId;
     private Long licenseKeyId;
+    private String customerEmail;
+    private String customerPhone;
+    private List<OrderItem> orderItems;
 }

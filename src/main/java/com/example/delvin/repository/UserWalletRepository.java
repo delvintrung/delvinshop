@@ -8,22 +8,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 public interface UserWalletRepository extends JpaRepository<UserWallet, Long> {
     UserWallet findByUserId(Long userId);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(
             value = """
-        SELECT w.*
-        FROM user_wallets w
-        WHERE w.user_id = :userId
+        SELECT *
+        FROM user_wallets
+        WHERE user_id = :userId
         FOR UPDATE
     """,
             nativeQuery = true
     )
-    UserWallet findByUserIdForUpdate(@Param("userId") Long userId);
+    Optional<UserWallet> findByUserIdForUpdate(@Param("userId") Long userId);
+
 
 
 }

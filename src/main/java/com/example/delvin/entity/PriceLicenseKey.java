@@ -3,6 +3,7 @@ package com.example.delvin.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -17,7 +18,7 @@ public class PriceLicenseKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double price;
+    private BigDecimal price;
     private String description;
     private Instant createdAt;
     private Instant updatedAt;
